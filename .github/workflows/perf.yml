@@ -27,7 +27,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: archive-sitespeed
-        path: /home/runner/work/ones-com/ones-com/sitespeed-result
+        path: /home/runner/work/${{ github.repository }}/${{ github.repository }}/sitespeed-result
 
     - name: Download Archive
       uses: actions/download-artifact@v3
