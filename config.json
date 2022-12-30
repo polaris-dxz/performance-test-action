@@ -1,0 +1,9 @@
+{
+  "browsertime": {
+    "iterations": 5,
+    "browser": "chrome",
+    "headless": true,
+    "screenshot": true,
+    "screenshotLCP": true
+  }
+}
