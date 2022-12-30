@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/polaris-dxz/performance-test-action/issues"
   },
-  "homepage": "https://github.com/polaris-dxz/performance-test-action#readme"
+  "homepage": "https://github.com/polaris-dxz/performance-test-action#readme",
+  "devDependencies": {
+    "sitespeed.io": "^26.1.0"
+  }
 }
