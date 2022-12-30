@@ -1,0 +1,20 @@
+{
+  "name": "performance-test-action",
+  "version": "1.0.0",
+  "description": "性能测试脚本",
+  "main": "src/index.js",
+  "scripts": {
+    "perf": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polaris-dxz/performance-test-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polaris-dxz/performance-test-action/issues"
+  },
+  "homepage": "https://github.com/polaris-dxz/performance-test-action#readme"
+}

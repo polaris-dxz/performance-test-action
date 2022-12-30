@@ -2,7 +2,7 @@ const execSync = require('child_process').execSync;
 const devCookies = require('./cookie.json')
 const fs = require('fs');
 const path = require('path');
-const { print } = require('../helper')
+const { print } = require('./helper')
 
 const getCookies = () => {
   let res = ''
@@ -30,8 +30,12 @@ const checkFileExists = () => {
 const runPerf = () => {
   const cookieStr = getCookies()
   const configPath = path.join(__dirname, './config.json')
+  let websites = process.argv[2] || ''
+  websites = websites.replace(',', ' ')
   const websitePath = path.join(__dirname, './website.txt')
-  const perf = `sitespeed.io ${cookieStr} --config ${configPath} ${websitePath} > ./logs/sitespeed.log`
+  console.log('websites', websites)
+  websites = !!websites ? websites : websitePath
+  const perf = `sitespeed.io ${cookieStr} --config ${configPath} ${websites} > ./logs/sitespeed.log`
   print.info(perf)
   try {
     execSync(perf)

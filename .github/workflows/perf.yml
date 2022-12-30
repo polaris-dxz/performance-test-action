@@ -1,16 +1,50 @@
+name: SiteSpeed
+run-name: ${{ github.actor }} performance testing 🚀
 on: 
   workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'     
-        required: true
-        default: 'warning'
-      tags:
-        description: 'Test scenario tags'  
+    inputs: 
+      websites:
+        descriptions: '需要测试的网站链接：用,区分'
 jobs:
-  printInputs:
+  sitespeed:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
     steps:
-    - run: |
-        echo "Log level: ${{ github.event.inputs.logLevel }}"
-        echo "Tags: ${{ github.event.inputs.tags }}" 
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm ci
+    - name: Run Performance
+      run: npm run perf ${{ github.event.inputs.websites }}"
+
+    - name: Archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: archive-sitespeed
+        path: /home/runner/work/ones-com/ones-com/sitespeed-result
+
+    - name: Download Archive
+      uses: actions/download-artifact@v3
+      with:
+        name: archive-sitespeed
+
+    - name: Notification
+      run: |
+        curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ed6490eb-9062-432b-9a77-bf80886312e1' \
+          -H 'Content-Type: application/json' -d \
+          '{
+            "msgtype": "markdown",
+            "markdown": {
+              "content": "✅ 性能报告分析成功：\n
+              项目：<font color=\"green\">ones-com</font>\n
+              下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            }
+          }'
+
+
