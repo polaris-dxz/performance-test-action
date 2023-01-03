@@ -1,10 +1,10 @@
 name: SiteSpeed
-run-name: ${{ github.actor }} performance testing 🚀
+run-name: '${{ github.actor }} performance testing: ${{ github.ref_name }} 🚀'
 on: 
   workflow_dispatch:
     inputs: 
       websites:
-        descriptions: '需要测试的网站链接：用,区分'
+        description: '需要测试的网站链接：用,区分'
 jobs:
   sitespeed:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: archive-sitespeed
-        path: /home/runner/work/${{ github.repository }}/${{ github.repository }}/sitespeed-result
+        path: /${{ github.workspace }}/sitespeed-result
 
     - name: Download Archive
       uses: actions/download-artifact@v3
