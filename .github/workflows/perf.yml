@@ -1,4 +1,4 @@
-name: SiteSpeed
+name: 'Performance Test'
 run-name: '${{ github.actor }} performance testing: ${{ github.ref_name }} 🚀'
 on: 
   workflow_dispatch:
@@ -42,9 +42,24 @@ jobs:
             "msgtype": "markdown",
             "markdown": {
               "content": "✅ 性能报告分析成功：\n
-              项目：<font color=\"green\">ones-com</font>\n
+              项目：<font color=\"green\">${{ github.repository }}</font>\n
               下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
             }
           }'
-
+  dump_contexts_to_log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
 
