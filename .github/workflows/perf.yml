@@ -36,7 +36,7 @@ jobs:
 
     - name: Notification
       run: |
-        curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ed6490eb-9062-432b-9a77-bf80886312e1' \
+        curl '${{ secrets.WECHAT_HOOKS }}' \
           -H 'Content-Type: application/json' -d \
           '{
             "msgtype": "markdown",
