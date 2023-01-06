@@ -1,3 +1,4 @@
 /node_modules/
 /sitespeed-result/
+/lighthouse-result/
 *.log

@@ -4,9 +4,20 @@ on:
   workflow_dispatch:
     inputs: 
       websites:
-        description: '需要测试的网站链接：用,区分'
+        description: 'websites：需要测试的网站链接。用,区分'
+      sitespeed:
+        description: 'Run SiteSpeed Performance Scripts'
+        required: true
+        type: boolean
+        default: true
+      lighthouse:
+        description: 'Run Lighthouse Performance Scripts'
+        required: true
+        type: boolean
+        default: false
 jobs:
   sitespeed:
+    if:  ${{ inputs.sitespeed }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,7 +32,7 @@ jobs:
     - name: Install dependencies
       run: npm ci -f
     - name: Run Performance
-      run: npm run perf ${{ github.event.inputs.websites }}
+      run: npm run perf:sitespeed ${{ github.event.inputs.websites }}
 
     - name: Archive
       uses: actions/upload-artifact@v3
@@ -46,20 +57,45 @@ jobs:
               下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
             }
           }'
-  dump_contexts_to_log:
+  lighthouse:
+    if:  ${{ inputs.lighthouse }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
     steps:
-      - name: Dump GitHub context
-        id: github_context_step
-        run: echo '${{ toJSON(github) }}'
-      - name: Dump job context
-        run: echo '${{ toJSON(job) }}'
-      - name: Dump steps context
-        run: echo '${{ toJSON(steps) }}'
-      - name: Dump runner context
-        run: echo '${{ toJSON(runner) }}'
-      - name: Dump strategy context
-        run: echo '${{ toJSON(strategy) }}'
-      - name: Dump matrix context
-        run: echo '${{ toJSON(matrix) }}'
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm ci -f
+    - name: Run Performance
+      run: npm run perf:lighthouse ${{ github.event.inputs.websites }}
+
+    - name: Archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: archive-lighthouse
+        path: /${{ github.workspace }}/lighthouse-result
+
+    - name: Download Archive
+      uses: actions/download-artifact@v3
+      with:
+        name: archive-lighthouse
+
+    - name: Notification
+      run: |
+        curl '${{ secrets.WECHAT_HOOKS }}' \
+          -H 'Content-Type: application/json' -d \
+          '{
+            "msgtype": "markdown",
+            "markdown": {
+              "content": "✅ 性能报告分析成功：\n
+              项目：<font color=\"green\">${{ github.repository }}</font>\n
+              下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            }
+          }'
 

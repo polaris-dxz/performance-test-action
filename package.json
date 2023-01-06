@@ -4,7 +4,11 @@
   "description": "性能测试脚本",
   "main": "src/index.js",
   "scripts": {
-    "perf": "node src/index.js"
+    "perf": "node src/index.js",
+    "perf:lighthouse": "npm run perf lighthouse",
+    "perf:sitespeed": "npm run perf sitespeed",
+    "clean:lighthouse": "rm -rf ./lighthouse-result",
+    "clean:sitespeed": "rm -rf ./sitespeed-result"
   },
   "repository": {
     "type": "git",
@@ -18,6 +22,7 @@
   },
   "homepage": "https://github.com/polaris-dxz/performance-test-action#readme",
   "devDependencies": {
+    "lighthouse": "^9.6.8",
     "sitespeed.io": "^26.1.0"
   }
 }
