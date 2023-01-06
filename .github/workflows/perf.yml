@@ -5,6 +5,10 @@ on:
     inputs: 
       websites:
         description: 'websites：需要测试的网站链接。用,区分'
+      iterations: 
+        description: '执行次数'
+        type: number
+        default: 5
       sitespeed:
         description: 'Run SiteSpeed Performance Scripts'
         required: true
@@ -32,7 +36,7 @@ jobs:
     - name: Install dependencies
       run: npm ci -f
     - name: Run Performance
-      run: npm run perf:sitespeed ${{ github.event.inputs.websites }}
+      run: npm run perf:sitespeed ${{ github.event.inputs.websites }} ${{ github.event.inputs.iterations }}
 
     - name: Archive
       uses: actions/upload-artifact@v3
@@ -73,7 +77,7 @@ jobs:
     - name: Install dependencies
       run: npm ci -f
     - name: Run Performance
-      run: npm run perf:lighthouse ${{ github.event.inputs.websites }}
+      run: npm run perf:lighthouse ${{ github.event.inputs.websites }} ${{ github.event.inputs.iterations }}
 
     - name: Archive
       uses: actions/upload-artifact@v3

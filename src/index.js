@@ -41,12 +41,12 @@ const checkFileExists = () => {
   }
 };
 
-const runSiteSpeed = (websites) => {
+const runSiteSpeed = (websites, iterations) => {
   const cookieStr = getCookies()
   const configPath = path.join(__dirname, siteSpeedConfig)
   websites = websites.replace(',', ' ')
   websites = !!websites ? websites : websitePath
-  const perf = `sitespeed.io ${cookieStr} --config ${configPath} ${websites} > ./logs/sitespeed.log`
+  const perf = `sitespeed.io ${cookieStr} --config ${configPath} ${websites} -n ${iterations} > ./logs/sitespeed.log`
   print.info(perf)
   try {
     execSync(perf)
@@ -59,7 +59,7 @@ const runSiteSpeed = (websites) => {
   }
 };
 
-const runLighthouse = (websites) => {
+const runLighthouse = (websites, iterations) => {
   print.warning('lighthouse 不支持传入 Cookie')
   try {
     let websiteArr = websites.split(',')
@@ -70,15 +70,17 @@ const runLighthouse = (websites) => {
     // const configPath = path.join(__dirname, lighthouseConfig)
     const config = `--locale zh-CN --preset=desktop --chrome-flags="--headless"`
     mkdir('lighthouse-result', '../')
-    websiteArr.forEach((website) => {
-      const outputName = website.replace(/http[s]{0,1}\:\/\//, '').replace(/\//g, '_')
-      if (outputName !== '') {
-        const outputPath = path.join(__dirname, '../', `./lighthouse-result/${outputName}`)
-        const output = `--output-path ${outputPath}.html` 
-        const perf = `lighthouse ${website} ${config} ${output} > ./logs/lighthouse.log`
-        execSync(perf)
-      }
-    });
+    for (let index = 0; index < iterations; index++) {
+      websiteArr.forEach((website) => {
+        const outputName = website.replace(/http[s]{0,1}\:\/\//, '').replace(/\//g, '_')
+        if (outputName !== '') {
+          const outputPath = path.join(__dirname, '../', `./lighthouse-result/${outputName}_${index}`)
+          const output = `--output-path ${outputPath}.html` 
+          const perf = `lighthouse ${website} ${config} ${output} > ./logs/lighthouse.log`
+          execSync(perf)
+        }
+      });
+    }
   } catch (err) {
       console.error(err);
   }
@@ -86,20 +88,22 @@ const runLighthouse = (websites) => {
 
 const runPerf = () => {
   const execScripts = process.argv[2] || ''
+  
   if (!execScripts) {
     print.error('请选择要执行的脚本!')
     process.exit(1)
   }
   mkdir('logs')
   const websites = process.argv[3] || ''
+  const iterations = +(process.argv[4] || '1')
 
   if (/sitespeed|lighthouse/.test(execScripts)) {
     if (execScripts.includes('sitespeed')) {
-      runSiteSpeed(websites)
+      runSiteSpeed(websites, iterations)
     }
   
     if (execScripts.includes('lighthouse')) {
-      runLighthouse(websites)
+      runLighthouse(websites, iterations)
     }
   } else {
     print.error('参数错误!')
