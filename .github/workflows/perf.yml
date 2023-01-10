@@ -25,6 +25,8 @@ jobs:
      steps:
      - name: show date
        run: date
+     - name: show ip
+       run: curl ifconfig.me
      - name: show ifconfig
        run: ifconfig
      - name: show netstat
