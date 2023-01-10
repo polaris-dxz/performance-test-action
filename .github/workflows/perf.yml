@@ -20,6 +20,13 @@ on:
         type: boolean
         default: false
 jobs:
+  environment: 
+     runs-on: ubuntu-latest
+     steps:
+     - name: show ifconfig
+       run: ifconfig
+     - name: show netstat
+       run: netstat -i
   sitespeed:
     if:  ${{ inputs.sitespeed }}
     runs-on: ubuntu-latest
