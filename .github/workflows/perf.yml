@@ -23,6 +23,8 @@ jobs:
   environment: 
      runs-on: ubuntu-latest
      steps:
+     - name: show date
+       run: date
      - name: show ifconfig
        run: ifconfig
      - name: show netstat
