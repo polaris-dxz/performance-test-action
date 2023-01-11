@@ -6,7 +6,7 @@ on:
       websites:
         description: 'websites：需要测试的网站链接。用,区分'
       iterations: 
-        description: '执行次数'
+        description: 'Run Number'
         type: number
         default: 5
       sitespeed:
@@ -31,6 +31,11 @@ jobs:
        run: ifconfig
      - name: show netstat
        run: netstat -i
+  benchmark:
+     runs-on: ubuntu-latest
+     steps:
+     - name: show date
+     run: curl ifconfig.me
   sitespeed:
     if:  ${{ inputs.sitespeed }}
     runs-on: ubuntu-latest

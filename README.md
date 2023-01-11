@@ -17,3 +17,6 @@ https://ones.com/ja/
 https://ones.com/ja/products/project
 ```
 
+TODO:
+[] 支持 cli 版本, cli 读取 website.txt 文件
+[] 支持通过 github.secret 读取 cookies，格式： a=b;c=d;
