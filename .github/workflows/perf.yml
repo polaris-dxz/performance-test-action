@@ -35,13 +35,13 @@ jobs:
      runs-on: ubuntu-latest
      steps:
      - name: show date
-     run: curl ifconfig.me
-  sitespeed:
-    if:  ${{ inputs.sitespeed }}
+     run: npm run perf b -w ${{ github.event.inputs.websites }}
+
+  performance:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [15.x]
+        node-version: [16.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -51,8 +51,9 @@ jobs:
 
     - name: Install dependencies
       run: npm ci -f
+    
     - name: Run Performance
-      run: npm run perf:sitespeed ${{ github.event.inputs.websites }} ${{ github.event.inputs.iterations }}
+      run: npm run perf m -w ${{ github.event.inputs.websites }} -n ${{ github.event.inputs.iterations }} -c ${{ secrets.COOKIES }} -l ${{ github.event.inputs.lighthouse }} -s ${{ github.event.inputs.sitespeed }}
 
     - name: Archive
       uses: actions/upload-artifact@v3
@@ -77,45 +78,3 @@ jobs:
               下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
             }
           }'
-  lighthouse:
-    if:  ${{ inputs.lighthouse }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [15.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Install dependencies
-      run: npm ci -f
-    - name: Run Performance
-      run: npm run perf:lighthouse ${{ github.event.inputs.websites }} ${{ github.event.inputs.iterations }}
-
-    - name: Archive
-      uses: actions/upload-artifact@v3
-      with:
-        name: archive-lighthouse
-        path: /${{ github.workspace }}/lighthouse-result
-
-    - name: Download Archive
-      uses: actions/download-artifact@v3
-      with:
-        name: archive-lighthouse
-
-    - name: Notification
-      run: |
-        curl '${{ secrets.WECHAT_HOOKS }}' \
-          -H 'Content-Type: application/json' -d \
-          '{
-            "msgtype": "markdown",
-            "markdown": {
-              "content": "✅ 性能报告分析成功：\n
-              项目：<font color=\"green\">${{ github.repository }}</font>\n
-              下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-            }
-          }'
-

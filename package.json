@@ -3,11 +3,11 @@
   "version": "1.0.1",
   "description": "performance test, benchmark",
   "main": "src/index.js",
+  "bin": {
+    "perf": "src/cli.js"
+  },
   "scripts": {
-    "perf": "node src/index.js",
-    "perf:lighthouse": "npm run perf lighthouse",
-    "perf:sitespeed": "npm run perf sitespeed",
-    "benchmark": "node src/benchmark.js",
+    "perf": "node src/cli.js",
     "clean:lighthouse": "rm -rf ./lighthouse-result",
     "clean:sitespeed": "rm -rf ./sitespeed-result"
   },
@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/polaris-dxz/performance-test-action#readme",
   "devDependencies": {
+    "chalk": "^2.4.1",
+    "figlet": "^1.2.0",
     "lighthouse": "^9.6.8",
     "sitespeed.io": "^26.1.0"
   },
