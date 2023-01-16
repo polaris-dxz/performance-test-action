@@ -1,4 +1,4 @@
-name: 'Performance'
+name: 'ONES Performance'
 description: 'Performance Test Action'
 inputs:
   websites:
