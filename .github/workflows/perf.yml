@@ -35,7 +35,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
      - name: show date
-     run: npm run perf b -w ${{ github.event.inputs.websites }}
+     run: node src/cli.js b -w ${{ github.event.inputs.websites }}
 
   performance:
     runs-on: ubuntu-latest
