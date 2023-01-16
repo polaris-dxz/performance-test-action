@@ -2,3 +2,4 @@
 /sitespeed-result/
 /lighthouse-result/
 *.log
+.DS_Store

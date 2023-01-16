@@ -1,5 +1,4 @@
 const execSync = require('child_process').execSync;
-const devCookies = require('./cookie.json')
 const fs = require('fs');
 const path = require('path');
 const { print } = require('./helper')
@@ -8,13 +7,14 @@ const siteSpeedConfig = './config/sitespeed.json'
 const lighthouseConfig = './config/lighthouse.config.js'
 const websitePath = path.join(__dirname, './website.txt')
 
-const getCookies = () => {
+const getCookies = (cookies) => {
+  const cookiesArr = cookies.split(';').filter(e => e)
   let res = ''
-  Object.entries(devCookies).forEach(e => {
-    const [k, v] = e
-    res += `--cookie ${k}="${v}" `
-  })
-  return res
+  if (cookiesArr.length > 0) {
+    cookiesArr.forEach(cookie => {
+      res += `--cookie ${cookie.trim()} `
+    })
+  }
 };
 
 const mkdir = (dir, to = './') => {
@@ -28,7 +28,7 @@ const mkdir = (dir, to = './') => {
 }
 
 const checkFileExists = () => {
-  const checkFiles = ['./cookie.json', siteSpeedConfig, './website.txt']
+  const checkFiles = [siteSpeedConfig, './website.txt']
   let flag = false
   checkFiles.forEach(filename => {
     if (!fs.existsSync(path.join(__dirname, filename))) {
@@ -41,12 +41,11 @@ const checkFileExists = () => {
   }
 };
 
-const runSiteSpeed = (websites, iterations) => {
-  const cookieStr = getCookies()
+const runSiteSpeed = (websites, iterations, cookies) => {
   const configPath = path.join(__dirname, siteSpeedConfig)
   websites = websites.replace(',', ' ')
   websites = !!websites ? websites : websitePath
-  const perf = `sitespeed.io ${cookieStr} --config ${configPath} ${websites} -n ${iterations} > ./logs/sitespeed.log`
+  const perf = `sitespeed.io ${cookies} --config ${configPath} ${websites} -n ${iterations} > ./logs/sitespeed.log`
   print.info(perf)
   try {
     execSync(perf)
@@ -59,7 +58,7 @@ const runSiteSpeed = (websites, iterations) => {
   }
 };
 
-const runLighthouse = (websites, iterations) => {
+const runLighthouse = (websites, iterations, cookies) => {
   print.warning('lighthouse 不支持传入 Cookie')
   try {
     let websiteArr = websites.split(',')
@@ -96,10 +95,11 @@ const runPerf = () => {
   mkdir('logs')
   const websites = process.argv[3] || ''
   const iterations = +(process.argv[4] || '1')
+  const cookies = process.argv[5] || ''
 
   if (/sitespeed|lighthouse/.test(execScripts)) {
     if (execScripts.includes('sitespeed')) {
-      runSiteSpeed(websites, iterations)
+      runSiteSpeed(websites, iterations, getCookies(cookies))
     }
   
     if (execScripts.includes('lighthouse')) {
