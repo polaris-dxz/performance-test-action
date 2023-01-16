@@ -15,6 +15,7 @@ const getCookies = (cookies) => {
       res += `--cookie ${cookie.trim()} `
     })
   }
+  return res
 };
 
 const mkdir = (dir, to = './') => {
