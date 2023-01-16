@@ -53,7 +53,7 @@ jobs:
       run: npm ci -f
     
     - name: Run Performance
-      run: npm run perf m -w ${{ github.event.inputs.websites }} -n ${{ github.event.inputs.iterations }} -c ${{ secrets.COOKIES }} -l ${{ github.event.inputs.lighthouse }} -s ${{ github.event.inputs.sitespeed }}
+      run: node src/cli.js m -w ${{ github.event.inputs.websites }} -n ${{ github.event.inputs.iterations }} -c ${{ secrets.COOKIES }} -l ${{ github.event.inputs.lighthouse }} -s ${{ github.event.inputs.sitespeed }}
 
     - name: Archive
       uses: actions/upload-artifact@v3
