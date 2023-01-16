@@ -4,11 +4,10 @@ const path = require('path');
 const { print } = require('./helper')
 
 const siteSpeedConfig = './config/sitespeed.json'
-const lighthouseConfig = './config/lighthouse.config.js'
 const websitePath = path.join(__dirname, './website.txt')
 
 const getCookies = (cookies) => {
-  const cookiesArr = cookies.split(';').filter(e => e)
+  const cookiesArr = cookies.replace(/[\"|"\']/g, '').split(';').filter(e => e)
   let res = ''
   if (cookiesArr.length > 0) {
     cookiesArr.forEach(cookie => {
@@ -97,6 +96,8 @@ const runPerf = () => {
   const websites = process.argv[3] || ''
   const iterations = +(process.argv[4] || '1')
   const cookies = process.argv[5] || ''
+
+  console.log('cookies', cookies)
 
   if (/sitespeed|lighthouse/.test(execScripts)) {
     if (execScripts.includes('sitespeed')) {
