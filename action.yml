@@ -1,0 +1,22 @@
+name: 'Performance'
+description: 'Performance Test Action'
+inputs:
+  websites:
+    description: 'websites：需要测试的网站链接。用,区分'
+  iterations: 
+    description: 'Run Number'
+    type: number
+    default: 5
+  sitespeed:
+    description: 'Run SiteSpeed Performance Scripts'
+    required: true
+    type: boolean
+    default: true
+  lighthouse:
+    description: 'Run Lighthouse Performance Scripts'
+    required: true
+    type: boolean
+    default: false
+runs:
+  using: 'node16'
+  main: 'src/index.js'
