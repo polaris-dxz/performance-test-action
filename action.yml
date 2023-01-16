@@ -1,5 +1,7 @@
 name: 'ONES Performance'
 description: 'Performance Test Action'
+icon: activity
+color: purple
 inputs:
   websites:
     description: 'websites：需要测试的网站链接。用,区分'
