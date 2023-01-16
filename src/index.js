@@ -7,7 +7,7 @@ const siteSpeedConfig = './config/sitespeed.json'
 const websitePath = path.join(__dirname, './website.txt')
 
 const getCookies = (cookies) => {
-  const cookiesArr = cookies.replace(/[\"|"\']/g, '').split(';').filter(e => e)
+  const cookiesArr = cookies.replace(/[\"|"\']/g, '').split('/logs').filter(e => e)
   let res = ''
   if (cookiesArr.length > 0) {
     cookiesArr.forEach(cookie => {
