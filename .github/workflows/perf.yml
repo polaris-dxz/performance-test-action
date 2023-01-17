@@ -55,7 +55,7 @@ jobs:
             '{
               "msgtype": "markdown",
               "markdown": {
-                "content": "🚀 <font color="comment">${{ github.actor }} 开始执行性能测试：</font>\n**测试站点**：${{ github.event.inputs.websites }}\n**执行次数**：${{ github.event.inputs.iterations }}\n**SiteSpeed**：${{ github.event.inputs.sitespeed }}\n**Lighthouse**：${{ github.event.inputs.lighthouse }}\n**Action地址**：[${{ env.action_url }}](${{ env.action_url }})"
+                "content": "🚀 <font color=\"comment\">${{ github.actor }} 开始执行性能测试：</font>\n **测试站点** ：<font color=\"comment\">${{ github.event.inputs.websites }}</font>\n **执行次数** ：${{ github.event.inputs.iterations }}\n **SiteSpeed** ：${{ github.event.inputs.sitespeed }}\n **Lighthouse** ：${{ github.event.inputs.lighthouse }}\n **Action地址** ：[${{ env.action_url }}](${{ env.action_url }})"
               }
             }'
 
@@ -80,6 +80,6 @@ jobs:
             '{
               "msgtype": "markdown",
               "markdown": {
-                "content": "✅ 性能报告分析成功：\n项目：<font color=\"green\">${{ github.repository }}</font>\n**执行用户**：${{ github.actor }}\n**报告链接**：[${{ env.action_url }}](${{ env.action_url }})"
+                "content": "✅ 性能报告分析成功：\n项目：<font color=\"green\">${{ github.repository }}</font>\n **执行用户** ：${{ github.actor }}\n **报告链接** ：[${{ env.action_url }}](${{ env.action_url }})"
               }
             }'
