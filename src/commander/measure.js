@@ -4,7 +4,6 @@ const shell = require('shelljs')
 const ora = require('ora')
 
 print.figlet('ONES Perf\n')
-const spinner = ora('🚗 开始性能测试...\n').start()
 
 const siteSpeedConfig = '../config/sitespeed.json'
 
@@ -30,6 +29,7 @@ const runSiteSpeed = ({websites, iterations, cookies}, verbose=false) => {
     print.info(perf)
   }
   try {
+    const spinner = ora('🚗 开始性能测试...\n').start()
     shell.exec(perf)
     spinner.succeed('🚀 性能分析成功\n')
     const result = shell.exec('tail -n -1 ./logs/sitespeed.log').toString()
@@ -42,6 +42,7 @@ const runSiteSpeed = ({websites, iterations, cookies}, verbose=false) => {
 };
 
 const runLighthouse = ({websites, iterations, cookies, preset}, verbose=false) => {
+  const spinner = ora('🚗 开始性能测试...\n').start()
   shell.mkdir('-p', 'lighthouse-result', 'logs')
   print.warning('lighthouse 不支持传入 Cookie')
   try {

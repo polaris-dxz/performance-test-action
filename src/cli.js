@@ -153,6 +153,8 @@ const argv = yargs(hideBin(process.argv))
     console.error('\n', msg);
     process.exit(1);
   })
+  .demandCommand(1)
+  .recommendCommands()
   .showHelpOnFail(false, '命令指定 --help 查看有效的选项')
   .version(version)
   .wrap(null)
