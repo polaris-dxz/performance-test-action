@@ -49,8 +49,8 @@ jobs:
         run: npm ci -f
 
       - name: Notification Start
-        date=$(date)
         run: |
+          date=$(date)
           curl '${{ secrets.WECHAT_HOOKS }}' \
             -H 'Content-Type: application/json' -d \
             '{
