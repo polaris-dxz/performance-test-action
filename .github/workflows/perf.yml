@@ -85,6 +85,6 @@ jobs:
             '{
               "msgtype": "markdown",
               "markdown": {
-                "content": "✅ <font color=\"green\">性能报告分析成功</font>：\n项目：<font color=\"comment\">${{ github.repository }}</font>\n执行用户：${{ github.actor }}\n\执行ip：${{ env.ip }}\n报告链接：[${{ env.action_url }}](${{ env.action_url }})"
+                "content": "✅ <font color=\"green\">性能报告分析成功</font>：\n项目：<font color=\"comment\">${{ github.repository }}</font>\n执行用户：${{ github.actor }}\n\执行ip：[${{ env.ip }}](https://whatismyipaddress.com/ip/${{ env.ip }})\n报告链接：[${{ env.action_url }}](${{ env.action_url }})"
               }
             }'
