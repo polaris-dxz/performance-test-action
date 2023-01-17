@@ -50,7 +50,7 @@ jobs:
 
       - name: Notification Start
         run: |
-          date=$(date)
+          echo "date=$(date)" >> $GITHUB_ENV
           curl '${{ secrets.WECHAT_HOOKS }}' \
             -H 'Content-Type: application/json' -d \
             '{
@@ -76,8 +76,8 @@ jobs:
 
       - name: Notification Success
         run: |
-          date=$(date)
-          ip=$(curl ifconfig.me)
+          echo "date=$(date)" >> $GITHUB_ENV
+          echo "ip=$(curl ifconfig.me)" >> $GITHUB_ENV
           curl '${{ secrets.WECHAT_HOOKS }}' \
             -H 'Content-Type: application/json' -d \
             '{
