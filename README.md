@@ -59,7 +59,7 @@ jobs:
 
 全局安装：
 ```shell
-npm i -g onesperf
+npm i -g ones-perf
 ```
 
 工具使用：
