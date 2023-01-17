@@ -45,12 +45,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Record Environment
+        run: |
+          echo "date=$(date)" >> $GITHUB_ENV
+          echo "ip=$(curl ifconfig.me)" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: npm ci -f
 
       - name: Notification Start
         run: |
-          echo "date=$(date)" >> $GITHUB_ENV
           curl '${{ secrets.WECHAT_HOOKS }}' \
             -H 'Content-Type: application/json' -d \
             '{
@@ -76,8 +80,6 @@ jobs:
 
       - name: Notification Success
         run: |
-          echo "date=$(date)" >> $GITHUB_ENV
-          echo "ip=$(curl ifconfig.me)" >> $GITHUB_ENV
           curl '${{ secrets.WECHAT_HOOKS }}' \
             -H 'Content-Type: application/json' -d \
             '{
