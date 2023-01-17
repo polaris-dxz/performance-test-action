@@ -1,14 +1,14 @@
 {
   "name": "ones-perf",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "performance test, benchmark",
   "main": "src/cli.js",
   "bin": {
     "perf": "src/cli.js"
   },
   "scripts": {
-    "perf": "node src/cli.js",
     "test": "echo 'test'",
+    "release": "np --no-yarn --no-2fa",
     "clean:lighthouse": "rm -rf ./lighthouse-result",
     "clean:sitespeed": "rm -rf ./sitespeed-result"
   },
