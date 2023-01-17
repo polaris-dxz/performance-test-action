@@ -1,8 +1,8 @@
 {
-  "name": "performance-test-action",
+  "name": "onesperf",
   "version": "1.0.1",
   "description": "performance test, benchmark",
-  "main": "src/index.js",
+  "main": "src/cli.js",
   "bin": {
     "perf": "src/cli.js"
   },
@@ -22,15 +22,16 @@
     "url": "https://github.com/polaris-dxz/performance-test-action/issues"
   },
   "homepage": "https://github.com/polaris-dxz/performance-test-action#readme",
-  "devDependencies": {
+  "dependencies": {
+    "autocannon": "^7.10.0",
     "chalk": "^2.4.1",
     "figlet": "^1.2.0",
     "lighthouse": "^9.6.8",
-    "sitespeed.io": "^26.1.0"
-  },
-  "dependencies": {
-    "autocannon": "^7.10.0",
     "shelljs": "^0.8.5",
+    "sitespeed.io": "^26.1.0",
     "yargs": "^17.6.2"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
   }
 }

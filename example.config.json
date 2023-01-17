@@ -1,0 +1,11 @@
+{
+  "iterations": 5,
+  "websites": [
+    "https://github.com/",
+    "https://ones.com/"
+  ],
+  "cookies": "a=b;c=d;e=f",
+  "sitespeed": true,
+  "lighthouse": false,
+  "verbose": false
+}

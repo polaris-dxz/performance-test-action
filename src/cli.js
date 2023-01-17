@@ -3,8 +3,10 @@ const yargs = require('yargs/yargs');
 const process = require('process');
 const { hideBin } = require('yargs/helpers');
 const { version } = require('../package.json')
-const { runSiteSpeed, runLighthouse } = require('./commander/measure')
+const { runSiteSpeed, runLighthouse, runPerf } = require('./commander/measure')
+const path = require('path');
 const { runBenchmark } = require('./commander/benchmark')
+const shell = require('shelljs')
 
 process.on('SIGINT', () => {
   process.kill(process.pid);
@@ -19,7 +21,14 @@ const argv = yargs(hideBin(process.argv))
     builder: function (yargs) {
       return yargs
         .check((argv) => {
-          if (argv.all) return true;
+          if (argv.config) {
+            const configPath = path.join(__dirname, argv.config)
+            if (!shell.test('-e', configPath)) {
+              throw new Error(`请检查 ${configPath} 是否存在！\n`);
+            } else {
+              return true
+            }
+          }
           if (typeof argv.websites !== 'string' || !argv.websites) {
             throw new Error('websites 参数不能为空！\n');
           }
@@ -31,6 +40,12 @@ const argv = yargs(hideBin(process.argv))
           return true;
         })
         .options({
+          config: {
+            alias: 'C',
+            describe: '读取 config 配置文件',
+            string: true, 
+            default: ''
+          },
           cookies: {
             alias: 'c',
             describe: '传入cookies',
@@ -67,23 +82,36 @@ const argv = yargs(hideBin(process.argv))
             boolean: true,
             default: true
           },
+          verbose: {
+            alias: 'v',
+            describe: '使用显示打印日志',
+            boolean: true,
+            default: false
+          },
         })
+        .usage('$0 measure --config <config path>')
         .usage('$0 measure -w <website>')
         .usage('$0 measure -w <website> -n 10')
         .example([
+          ['$0 measure --config ./config.json', '通过 config 文件执行测试'],
           ['$0 measure -w https://ones.com,https://ones,com/ja', '测试 ones.com 英文日文主站性能'],
           ['$0 measure -w https://dev.myones.net/web-ones-com/U0056 -c "a=b;c=d"', '测试 dev 环境性能，并传入 cookie'],
         ]);
     },
     handler: function (argv) {
       const {
-        websites, preset, iterations, cookies, lighthouse, sitespeed
+        websites, preset, iterations, cookies, lighthouse, sitespeed, config, verbose
       } = argv;
+      if (config) {
+        const configPath = path.join(__dirname, config)
+        runPerf(configPath, verbose)
+        return
+      }
       if (sitespeed) {
-        runSiteSpeed({websites, preset, iterations, cookies})
+        runSiteSpeed({websites, preset, iterations, cookies}, verbose)
       }
       if (lighthouse) {
-        runLighthouse({websites, preset, iterations, cookies})
+        runLighthouse({websites, preset, iterations, cookies}, verbose)
       }
     },
   })

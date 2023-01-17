@@ -5,6 +5,7 @@ const shell = require('shelljs')
 const siteSpeedConfig = '../config/sitespeed.json'
 
 const getCookies = (cookies) => {
+  // 兼容 github action secret 问题，cookie 不能用 ; 分割
   const cookiesArr = cookies.replace(/[\"|"\']/g, '').replace(/\;/g, '/').split('/').filter(e => e)
   let res = ''
   if (cookiesArr.length > 0) {
@@ -15,13 +16,15 @@ const getCookies = (cookies) => {
   return res
 };
 
-const runSiteSpeed = ({websites, iterations, cookies}) => {
+const runSiteSpeed = ({websites, iterations, cookies}, verbose=false) => {
   shell.mkdir('-p', 'sitespeed-result', 'logs')
   const configPath = path.join(__dirname, siteSpeedConfig)
   websites = websites.replace(',', ' ')
   cookies = getCookies(cookies)
   const perf = `npx sitespeed.io ${cookies} --config ${configPath} ${websites} -n ${iterations} > ./logs/sitespeed.log`
-  print.info(perf)
+  if (verbose) {
+    print.info(perf)
+  }
   try {
     shell.exec(perf)
     const result = shell.exec('tail -n -1 ./logs/sitespeed.log').toString()
@@ -33,7 +36,7 @@ const runSiteSpeed = ({websites, iterations, cookies}) => {
   }
 };
 
-const runLighthouse = ({websites, iterations, cookies, preset}) => {
+const runLighthouse = ({websites, iterations, cookies, preset}, verbose=false) => {
   shell.mkdir('-p', 'lighthouse-result', 'logs')
   print.warning('lighthouse 不支持传入 Cookie')
   try {
@@ -55,8 +58,30 @@ const runLighthouse = ({websites, iterations, cookies, preset}) => {
   }
 }
 
+const runPerf = (config, verbose) => {
+  let { websites, iterations, cookies, preset, sitespeed, lighthouse } = require(config)
+  sitespeed = sitespeed || true
+  lighthouse = lighthouse || false
+  cookies = cookies || ''
+  preset = preset || 'desktop'
+  iterations = iterations || 5
+  websites = websites.join(',') || ''
+
+  if (websites) {
+    if (sitespeed) {
+      runSiteSpeed({websites, preset, iterations, cookies}, verbose)
+    }
+    if (lighthouse) {
+      runLighthouse({websites, preset, iterations, cookies}, verbose)
+    }
+  } else {
+    throw new Error('websites 参数不能为空！\n');
+  }
+}
+
 module.exports = {
   runSiteSpeed,
-  runLighthouse
+  runLighthouse,
+  runPerf
 }
 
