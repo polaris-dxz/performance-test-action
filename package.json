@@ -29,7 +29,8 @@
     "lighthouse": "^9.6.8",
     "shelljs": "^0.8.5",
     "sitespeed.io": "^26.1.0",
-    "yargs": "^17.6.2"
+    "yargs": "^17.6.2",
+    "ora": "^5.4.1"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"

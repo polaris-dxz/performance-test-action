@@ -1,6 +1,10 @@
 const path = require('path');
 const { print } = require('../helper')
 const shell = require('shelljs')
+const ora = require('ora')
+
+print.figlet('ONES Perf\n')
+const spinner = ora('🚗 开始性能测试...\n').start()
 
 const siteSpeedConfig = '../config/sitespeed.json'
 
@@ -27,6 +31,7 @@ const runSiteSpeed = ({websites, iterations, cookies}, verbose=false) => {
   }
   try {
     shell.exec(perf)
+    spinner.succeed('🚀 性能分析成功\n')
     const result = shell.exec('tail -n -1 ./logs/sitespeed.log').toString()
     const resultPath = result.split('HTML stored in ')[1]
     print.success(`Execute Success! Report Address is:`)
@@ -53,6 +58,7 @@ const runLighthouse = ({websites, iterations, cookies, preset}, verbose=false) =
         }
       });
     }
+    spinner.succeed('🚀 性能分析成功\n')
   } catch (error) {
     print.error(error)
   }
