@@ -47,7 +47,7 @@ jobs:
 
       - name: Record Environment
         run: |
-          echo "date=$(date)" >> $GITHUB_ENV
+          echo "date=$(TZ=UTC-8 date +%Y-%m-%d" "%H:%M:%S)" >> $GITHUB_ENV
           echo "ip=$(curl ifconfig.me)" >> $GITHUB_ENV
 
       - name: Install dependencies
