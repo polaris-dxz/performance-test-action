@@ -1,5 +1,7 @@
 name: 'Performance Test'
 run-name: '${{ github.actor }} performance testing: ${{ github.ref_name }} 🚀'
+env:
+  action_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 on:
   workflow_dispatch:
     inputs:
@@ -46,6 +48,17 @@ jobs:
       - name: Install dependencies
         run: npm ci -f
 
+      - name: Notification Success
+        run: |
+          curl '${{ secrets.WECHAT_HOOKS }}' \
+            -H 'Content-Type: application/json' -d \
+            '{
+              "msgtype": "markdown",
+              "markdown": {
+                "content": "🚀 ${{ github.actor }} 开始执行性能测试：\n测试站点：${{ github.event.inputs.websites }}\n执行次数：${{ github.event.inputs.iterations }}\nSiteSpeed：${{ github.event.inputs.sitespeed }}Lighthouse${{ github.event.inputs.lighthouse }}\nAction地址：[${{ env.action_url }}](${{ env.action_url }})"
+              }
+            }'
+
       - name: Run Performance
         run: node src/cli.js m -w ${{ github.event.inputs.websites }} -n ${{ github.event.inputs.iterations }} -c ${{ secrets.COOKIES }} -l ${{ github.event.inputs.lighthouse }} -s ${{ github.event.inputs.sitespeed }} -v true
 
@@ -60,13 +73,13 @@ jobs:
         with:
           name: archive-sitespeed
 
-      - name: Notification
+      - name: Notification Success
         run: |
           curl '${{ secrets.WECHAT_HOOKS }}' \
             -H 'Content-Type: application/json' -d \
             '{
               "msgtype": "markdown",
               "markdown": {
-                "content": "✅ 性能报告分析成功：\n项目：<font color=\"green\">${{ github.repository }}</font>\n执行用户：${{ github.actor }}下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+                "content": "✅ 性能报告分析成功：\n项目：<font color=\"green\">${{ github.repository }}</font>\n执行用户：${{ github.actor }}\n下载链接：[${{ env.action_url }}](${{ env.action_url }})"
               }
             }'
