@@ -1,6 +1,6 @@
 {
   "name": "ones-perf",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "performance test, benchmark",
   "main": "src/cli.js",
   "bin": {
@@ -8,6 +8,7 @@
   },
   "scripts": {
     "perf": "node src/cli.js",
+    "test": "echo 'test'",
     "clean:lighthouse": "rm -rf ./lighthouse-result",
     "clean:sitespeed": "rm -rf ./sitespeed-result"
   },
