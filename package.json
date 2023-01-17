@@ -1,6 +1,6 @@
 {
   "name": "ones-perf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "performance test, benchmark",
   "main": "src/cli.js",
   "bin": {
