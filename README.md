@@ -31,10 +31,19 @@ on:
         type: boolean
         default: false
 jobs:
-  runs-on: ubuntu-latest
+  performance:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
     steps:
-      - name: Performance
-      uses: polaris-dxz/performance-test-action@v1
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Performance Tests
+      uses: polaris-dxz/performance-test-action@master
       with:
         websites: ${{ github.event.inputs.websites }}
         iterations: ${{ github.event.inputs.iterations }}
@@ -43,16 +52,16 @@ jobs:
         sitespeed: ${{ github.event.inputs.sitespeed }}
         lighthouse: ${{ github.event.inputs.lighthouse }}
 
-      - name: Notification
-        run: |
-          curl '${{ secrets.WECHAT_HOOKS }}' \
-            -H 'Content-Type: application/json' -d \
-            '{
-              "msgtype": "markdown",
-              "markdown": {
-                "content": "✅ 性能报告分析成功：\n项目：<font color=\"green\">${{ github.repository }}</font>\n执行用户：${{ github.actor }}下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-              }
-            }'
+    - name: Notification
+      run: |
+        curl '${{ secrets.WECHAT_HOOKS }}' \
+          -H 'Content-Type: application/json' -d \
+          '{
+            "msgtype": "markdown",
+            "markdown": {
+              "content": "✅ 性能报告分析成功：\n项目：<font color=\"green\">${{ github.repository }}</font>\n执行用户：${{ github.actor }}下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            }
+          }'
 ```
 
 ## 如何使用 cli 工具跑性能报告
