@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "node ./src/cli.js m --config ./examples/config.json",
+    "all": "npm test",
     "release": "np --no-yarn --no-2fa",
     "clean:lighthouse": "rm -rf ./lighthouse-result",
     "clean:sitespeed": "rm -rf ./sitespeed-result"
