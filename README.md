@@ -6,63 +6,7 @@ COOKIES Value 格式如下：`a=b/c=d/e=f`
 
 ## 如何在自己的仓库使用 Github Action 跑性能报告
 
-在项目根目录新建 `.github/workflows/perf.yml`
-
-```yaml
-name: 'Performance Test'
-run-name: '${{ github.actor }} performance testing: ${{ github.ref_name }} 🚀'
-on:
-  workflow_dispatch:
-    inputs:
-      websites:
-        description: 'websites：需要测试的网站链接。用,区分'
-      iterations:
-        description: 'Run Number'
-        type: number
-        default: 5
-      sitespeed:
-        description: 'Run SiteSpeed Performance Scripts'
-        required: true
-        type: boolean
-        default: true
-      lighthouse:
-        description: 'Run Lighthouse Performance Scripts'
-        required: true
-        type: boolean
-        default: false
-jobs:
-  performance:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [15.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Performance Tests
-      uses: polaris-dxz/performance-test-action@master
-      with:
-        websites: ${{ github.event.inputs.websites }}
-        iterations: ${{ github.event.inputs.iterations }}
-        cookies: ${{ secrets.COOKIES }}
-        preset: desktop
-        sitespeed: ${{ github.event.inputs.sitespeed }}
-        lighthouse: ${{ github.event.inputs.lighthouse }}
-
-    - name: Notification
-      run: |
-        curl '${{ secrets.WECHAT_HOOKS }}' \
-          -H 'Content-Type: application/json' -d \
-          '{
-            "msgtype": "markdown",
-            "markdown": {
-              "content": "✅ 性能报告分析成功：\n项目：<font color=\"green\">${{ github.repository }}</font>\n执行用户：${{ github.actor }}下载链接：[${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-            }
-          }'
-```
+参考 [test.yml](./.github/workflows/test.yml)
 
 ## 如何使用 cli 工具跑性能报告
 
