@@ -6,7 +6,8 @@ const { version } = require('../package.json')
 const { runSiteSpeed, runLighthouse, runPerf } = require('./commander/measure')
 const path = require('path');
 const { runBenchmark } = require('./commander/benchmark')
-const shell = require('shelljs')
+const shell = require('shelljs');
+const { default: chalk } = require('chalk');
 
 process.on('SIGINT', () => {
   process.kill(process.pid);
@@ -21,21 +22,22 @@ const argv = yargs(hideBin(process.argv))
     builder: function (yargs) {
       return yargs
         .check((argv) => {
+          const err = chalk.red('[ERROR] ')
           if (argv.config) {
-            const configPath = path.join(__dirname, argv.config)
+            const configPath = path.resolve('.', argv.config)
             if (!shell.test('-e', configPath)) {
-              throw new Error(`请检查 ${configPath} 是否存在！\n`);
+              throw new Error(`${err}请检查 ${configPath} 是否存在！\n`);
             } else {
               return true
             }
           }
           if (typeof argv.websites !== 'string' || !argv.websites) {
-            throw new Error('websites 参数不能为空！\n');
+            throw new Error(`${err}websites 参数不能为空！\n`);
           }
           const typeErr = typeof argv.lighthouse !== 'boolean' || typeof argv.sitespeed !== 'boolean'
           const notCheckPerfTool = !argv.lighthouse && !argv.sitespeed
           if (typeErr || notCheckPerfTool) {
-            throw new Error('请至少选择一个测试工具！\n');
+            throw new Error(`${err}请至少选择一个测试工具！\n`);
           }
           return true;
         })
@@ -103,7 +105,7 @@ const argv = yargs(hideBin(process.argv))
         websites, preset, iterations, cookies, lighthouse, sitespeed, config, verbose
       } = argv;
       if (config) {
-        const configPath = path.join(__dirname, config)
+        const configPath = path.resolve('.', config)
         runPerf(configPath, verbose)
         return
       }
