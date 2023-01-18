@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const { print } = require('../helper')
 const shell = require('shelljs')
 const ora = require('ora')
@@ -66,13 +67,17 @@ const runLighthouse = ({websites, iterations, cookies, preset}, verbose=false) =
 }
 
 const runPerf = (config, verbose) => {
-  let { websites, iterations, cookies, preset, sitespeed, lighthouse } = require(config)
+  let { websitesPath, iterations, cookies, preset, sitespeed, lighthouse } = require(config)
+  websitesPath = path.resolve('.', websitesPath)
   sitespeed = sitespeed || true
   lighthouse = lighthouse || false
   cookies = cookies || ''
   preset = preset || 'desktop'
   iterations = iterations || 5
-  websites = websites.join(',') || ''
+
+  const data = fs.readFileSync(websitesPath, 'UTF-8')
+  const lines = data.split(/\r?\n/)
+  const websites = lines.join(',').trim() || ''
 
   if (websites) {
     if (sitespeed) {

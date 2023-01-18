@@ -108,13 +108,16 @@ example.config.json
 ```json
 {
   "iterations": 5,
-  "websites": [
-    "https://github.com/",
-    "https://ones.com/"
-  ],
+  "websitesPath": "./websites.txt",
   "cookies": "a=b;c=d;e=f",
   "sitespeed": true,
   "lighthouse": false,
   "verbose": false
 }
+```
+
+websites.txt
+```txt
+https://ones.com
+https://ones.com/ja
 ```

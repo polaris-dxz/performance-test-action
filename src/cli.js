@@ -28,6 +28,11 @@ const argv = yargs(hideBin(process.argv))
             if (!shell.test('-e', configPath)) {
               throw new Error(`${err}请检查 ${configPath} 是否存在！\n`);
             } else {
+              let { websitesPath } = require(configPath) 
+              websitesPath = path.resolve('.', websitesPath)
+              if (!shell.test('-e', websitesPath)) {
+                throw new Error(`${err}请检查 ${websitesPath} 是否存在！\n`);
+              }
               return true
             }
           }

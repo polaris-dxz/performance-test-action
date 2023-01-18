@@ -7,7 +7,7 @@
     "perf": "src/cli.js"
   },
   "scripts": {
-    "test": "echo 'test'",
+    "test": "node ./src/cli.js m --config ./examples/config.json",
     "release": "np --no-yarn --no-2fa",
     "clean:lighthouse": "rm -rf ./lighthouse-result",
     "clean:sitespeed": "rm -rf ./sitespeed-result"

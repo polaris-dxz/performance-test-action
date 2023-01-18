@@ -1,9 +1,6 @@
 {
-  "iterations": 5,
-  "websites": [
-    "https://github.com/",
-    "https://ones.com/"
-  ],
+  "iterations": 1,
+  "websitesPath": "./examples/websites.txt",
   "cookies": "a=b;c=d;e=f",
   "sitespeed": true,
   "lighthouse": false,
