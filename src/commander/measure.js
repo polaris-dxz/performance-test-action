@@ -9,6 +9,7 @@ print.figlet('ONES Perf\n')
 const siteSpeedConfig = '../config/sitespeed.json'
 
 const getCookies = (cookies) => {
+  if (!cookies) return cookies
   // 兼容 github action secret 问题，cookie 不能用 ; 分割
   const cookiesArr = cookies.replace(/[\"|"\']/g, '').replace(/\;/g, '/').split('/').filter(e => e)
   let res = ''
