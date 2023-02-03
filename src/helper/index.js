@@ -1,10 +1,11 @@
 const figlet = require('figlet')
+const chalk = require('chalk')
 
 const print = {
-  error: content => console.log("\033[31m%s\033[0m", content),
-  warning: content => console.log( "\033[33m%s\033[0m", content),
-  success: content => console.log("\033[32m%s\033[0m", content),
-  info: content => console.log("\033[36m%s\033[0m", content),
+  error: (content, ...argv) => console.log(chalk.red(content), ...argv),
+  warning: (content, ...argv) => console.log(chalk.yellow(content), ...argv),
+  success: (content, ...argv) => console.log(chalk.green(content), ...argv),
+  info: (content, ...argv) => console.log(chalk.cyan(content), ...argv),
   figlet: content => console.log(figlet.textSync(content)),
 }
 

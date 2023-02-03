@@ -1,6 +1,6 @@
 {
   "browsertime": {
-    "iterations": 5,
+    "iterations": 9,
     "browser": "chrome",
     "headless": true,
     "screenshot": true,
