@@ -9,7 +9,7 @@
   "scripts": {
     "test": "node ./src/cli.js m --config ./examples/config.json",
     "all": "npm test",
-    "release": "np --no-yarn --no-2fa",
+    "release": "np --no-yarn --no-2fa && bash ./scripts/notify.sh",
     "clean:lighthouse": "rm -rf ./lighthouse-result",
     "clean:sitespeed": "rm -rf ./sitespeed-result"
   },
@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/polaris-dxz/performance-test-action/issues"
   },
-  "homepage": "https://github.com/polaris-dxz/performance-test-action#readme",
+  "homepage": "https://www.npmjs.com/package/ones-perf",
   "dependencies": {
     "@actions/core": "^1.10.0",
     "autocannon": "^7.10.0",
